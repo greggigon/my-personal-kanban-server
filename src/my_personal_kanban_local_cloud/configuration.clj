@@ -1,6 +1,6 @@
 (ns my-personal-kanban-local-cloud.configuration)
 
-(def default-configuration {:port 8080})
+(def default-configuration {:port 8080 :directory (str (System/getProperty "user.home") "/" "mpk")})
 (def configuration (ref default-configuration))
 
 
