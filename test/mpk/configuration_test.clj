@@ -1,6 +1,6 @@
-(ns my-personal-kanban-local-cloud.configuration-test
+(ns mpk.configuration-test
   (:require [clojure.test :refer :all]
-            [my-personal-kanban-local-cloud.configuration :refer :all]))
+            [mpk.configuration :refer :all]))
 
 (deftest test-string-of-integer
   (testing "Testing returning integer when it's possible"

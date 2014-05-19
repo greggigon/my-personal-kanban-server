@@ -1,10 +1,6 @@
-(ns my-personal-kanban-local-cloud.core-test
+(ns mpk.core-test
   (:require [clojure.test :refer :all]
-            [my-personal-kanban-local-cloud.core :refer :all]))
-
-(deftest test-validating-key
-  (testing "Key validation, should always report as key valid for any key"
-    (is (= (validate-key "sdrt567ujhnb nmjhg") true))))
+            [mpk.core :refer :all]))
 
 (deftest test-valid-actions-only
     (testing "If only valid actions are accepted"

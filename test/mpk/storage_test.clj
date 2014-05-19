@@ -1,6 +1,6 @@
-(ns my-personal-kanban-local-cloud.storage-test
+(ns mpk.storage-test
   (:require [clojure.test :refer :all]
-            [my-personal-kanban-local-cloud.storage :refer :all])
+            [mpk.storage :refer :all])
   (:import (java.io File)))
 
 
@@ -36,3 +36,22 @@
       (is (= (load-kanban temporary-kanban-folder "foobar") "{\"some\":\"content\"}"))
       (.delete (File. file)))
     (.delete (File. temporary-kanban-folder))))
+
+(deftest test-creation-of-md5-hashes
+  (testing "If the valid MD5 hash was created"
+    (are [to-hash _ result] (= (md5 to-hash) result)
+         "a"       => "0cc175b9c0f1b6a831c399e269772661"
+         "foo bar" => "327b6f07435811239bc47e1544353273")))
+
+(deftest test-timestamp-on-file
+  (testing "Timesamp of last update on file returned by storage funcitons"
+    (.mkdir (File. temporary-kanban-folder))
+    (save temporary-kanban-folder "foobar" "content")
+    (is (not (= (last-updated temporary-kanban-folder "foobar") 0)))
+    (.delete (File. temporary-kanban-folder "foobar.data"))
+    (.delete (File. temporary-kanban-folder))))
+
+(deftest test-timestamp-on-non-existing-file
+  (testing "Timesamp of last update on key that doesn't extist should be 0"
+    (is (= (last-updated temporary-kanban-folder "foobar") 0))))
+

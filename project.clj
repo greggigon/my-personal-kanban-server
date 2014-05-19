@@ -5,8 +5,11 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [ring/ring-core "1.2.2"]
-                 [ring/ring-jetty-adapter "1.2.2"]]
+                 [ring/ring-jetty-adapter "1.2.2"]
+                 [org.clojure/data.json "0.2.4"]]
   :plugins [[lein-ring "0.8.10"]]
-  :ring {:handler my-personal-kanban-local-cloud.core/mpk-app}
-  :main my-personal-kanban-local-cloud.core)
+  :ring {:handler mpk.core/mpk-app}
+  :main mpk.core
+  :prep-tasks[["compile" "mpk.action-handlers"]
+              "javac" "compile"])
 
