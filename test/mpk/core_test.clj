@@ -11,4 +11,6 @@
           {:params {"action" "unsupported"}} => 405
           {:params {}} => 405)))
 
-
+(deftest test-callback-params-check
+  (testing "If the callback is missing blow response with 405"
+    (is (= (:status (check-callback-paramater {"foo" "bar"} {} '#(str %1 %2))) 405))))

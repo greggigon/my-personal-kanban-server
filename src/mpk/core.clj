@@ -14,6 +14,11 @@
               :put (handlers/->SaveHandler)
               :key (handlers/->KeyHandler)})
 
+(defn check-callback-paramater [params session success]
+  (if (nil? (get "callback" params))
+    (-> (response "This service responds only to JSONP request. You are missing callback parameter") (status 405))
+    (success params session)))
+
 (defn mpk-handler [request]
   (let [{action "action" :as params} (:params request) session (:session request)]
     (if (or (nil? action) (nil? (get valid-actions action)))
