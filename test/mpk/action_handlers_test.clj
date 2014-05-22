@@ -55,4 +55,5 @@
     (let [read-handler (handlers/->ReadHandler)
           response (perform read-handler {"kanbanKey" "foobarboo"} {})]
       (println response)
-      (is (= (:body response) (json/write-str {"success" false "error" "Kanban with key [foobarboo] was never persisted"}))))))
+      (is (= (:body response) (json/write-str {"success" false "error" "Kanban with key [foobarboo] was never persisted"})))
+      (is (= (:status response) 200)))))
