@@ -14,6 +14,10 @@
               :put (handlers/->SaveHandler)
               :key (handlers/->KeyHandler)})
 
+(defn valid-action? [request]
+  (let [{action "action" :as params} (:params request)]
+    (not (or (nil? action) (nil? (get valid-actions action))))))
+
 (defn check-callback-paramater [params session success]
   (if (nil? (get "callback" params))
     (-> (response "This service responds only to JSONP request. You are missing callback parameter") (status 405))
