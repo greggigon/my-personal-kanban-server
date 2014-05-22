@@ -14,7 +14,8 @@
              {"Content-Type" "application/json"}
              (json/write-str {"success" false, "error" message})))
 
-
+(defn kanban-with-key-was-persisted? [directory kanban-key]
+  (not= (last-updated directory kanban-key) 0))
 
 (deftype SaveHandler []
   ActionHandler
@@ -26,7 +27,7 @@
   ActionHandler
   (perform [this params session]
     (let [{kanban-key "kanbanKey"} params directory (:directory @configuration)]
-      (if (not= (last-updated directory kanban-key) 0)
+      (if (kanban-with-key-was-persisted? directory kanban-key)
         (Response. 200
                    {"Content-Type" "application/json"}
                    (json/write-str {"success" true
