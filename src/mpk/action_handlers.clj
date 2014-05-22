@@ -9,6 +9,13 @@
 
 (defrecord Response [status headers body])
 
+(defn handle-error-within-body [message]
+  (Response. 200
+             {"Content-Type" "application/json"}
+             (json/write-str {"success" false, "error" message})))
+
+
+
 (deftype SaveHandler []
   ActionHandler
   (perform [this params session]
@@ -18,13 +25,14 @@
 (deftype ReadHandler []
   ActionHandler
   (perform [this params session]
-
     (let [{kanban-key "kanbanKey"} params directory (:directory @configuration)]
-      (Response. 200
-                 {"Content-Type" "application/json"}
-                 (json/write-str {"success" true
-                                  "lastUpdated" (last-updated directory kanban-key)
-                                  "kanban" (load-kanban directory kanban-key)})))))
+      (if (not= (last-updated directory kanban-key) 0)
+        (Response. 200
+                   {"Content-Type" "application/json"}
+                   (json/write-str {"success" true
+                                    "lastUpdated" (last-updated directory kanban-key)
+                                    "kanban" (load-kanban directory kanban-key)}))
+        (handle-error-within-body (str "Kanban with key [" kanban-key "] was never persisted"))))))
 
 
 
