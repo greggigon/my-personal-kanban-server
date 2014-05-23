@@ -22,14 +22,13 @@
   "Saves Kanban with Key to a specific location on the file System"
   [storage-directory kanban-key kanban-content]
   (spit
-   (str storage-directory "/" kanban-key file-extension) (pr-str kanban-content)))
+   (str storage-directory "/" kanban-key file-extension) kanban-content) :encoding "UTF-8")
 
 
 (defn load-kanban
   "Loads content of Kanban from local file System"
   [storage-directory kanban-key]
-  (read-string
-   (slurp (str storage-directory "/" kanban-key file-extension))))
+  (slurp (.getAbsolutePath (File. storage-directory (str kanban-key file-extension))) :encoding "UTF-8"))
 
 (defn last-updated
   "Checks the last updated timestamp on a file. Returns TIME in ms. 0 if there is no file"

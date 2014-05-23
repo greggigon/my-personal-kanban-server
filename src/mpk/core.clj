@@ -18,17 +18,17 @@
   (let [{action "action" :as params} (:params request)]
     (not (or (nil? action) (nil? (get valid-actions action))))))
 
-(defn check-callback-paramater [params session success]
-  (if (nil? (get "callback" params))
-    (-> (response "This service responds only to JSONP request. You are missing callback parameter") (status 405))
-    (success params session)))
+(defn check-callback-paramater [params session handler]
+  (if (nil? (get params "callback"))
+     (-> (response "This service responds only to JSONP request. You are missing callback parameter") (status 405))
+      (perform handler params session)))
 
 (defn mpk-handler [request]
   (let [{action "action" :as params} (:params request) session (:session request)]
     (if (or (nil? action) (nil? (get valid-actions action)))
       (-> (response "Invalid method") (status 405))
       (let [the-action-handler ((get valid-actions action) actions)]
-        (perform the-action-handler params session)))))
+        (check-callback-paramater params session the-action-handler)))))
 
 (def mpk-app (wrap-session (wrap-params mpk-handler)))
 

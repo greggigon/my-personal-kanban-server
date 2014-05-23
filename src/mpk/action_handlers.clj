@@ -15,6 +15,7 @@
              (json/write-str {"success" false, "error" message})))
 
 (defn kanban-with-key-was-persisted? [directory kanban-key]
+  (println (str "Last updated comes as " (last-updated directory kanban-key)))
   (not= (last-updated directory kanban-key) 0))
 
 (deftype SaveHandler []
@@ -27,6 +28,7 @@
   ActionHandler
   (perform [this params session]
     (let [{kanban-key "kanbanKey"} params directory (:directory @configuration)]
+      (println (str "And the thing is: " (kanban-with-key-was-persisted? directory kanban-key)))
       (if (kanban-with-key-was-persisted? directory kanban-key)
         (Response. 200
                    {"Content-Type" "application/json"}
