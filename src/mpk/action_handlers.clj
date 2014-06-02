@@ -7,12 +7,13 @@
 (defprotocol ActionHandler
   (perform [this params session]))
 
-(defrecord Response [status headers body])
+(defrecord Response [status headers body session])
 
 (defn handle-error-within-body [message]
   (Response. 200
              {"Content-Type" "application/json"}
-             (json/write-str {"success" false, "error" message})))
+             (json/write-str {"success" false, "error" message})
+             {}))
 
 (defn kanban-with-key-was-persisted? [directory kanban-key]
   (not= (last-updated directory kanban-key) 0))
@@ -20,7 +21,7 @@
 (deftype SaveHandler []
   ActionHandler
   (perform [this params session]
-          (Response. 200 {"Content-Type" "text/plain"} "Yuppi, save-handler works")))
+          (Response. 200 {"Content-Type" "text/plain"} "Yuppi, save-handler works" {})))
 
 
 (deftype ReadHandler []
@@ -32,7 +33,8 @@
                    {"Content-Type" "application/json"}
                    (json/write-str {"success" true
                                     "lastUpdated" (last-updated directory kanban-key)
-                                    "kanban" (load-kanban directory kanban-key)}))
+                                    "kanban" (load-kanban directory kanban-key)})
+                   {})
         (handle-error-within-body (str "Kanban with key [" kanban-key "] was never persisted"))))))
 
 
@@ -46,5 +48,6 @@
       (Response. 200
                  {"Content-Type" "application/json"}
                  (json/write-str {"success" true
-                                  "lastUpdated" (last-updated directory kanban-key)})))))
+                                  "lastUpdated" (last-updated directory kanban-key)})
+                 {}))))
 

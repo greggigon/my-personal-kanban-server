@@ -19,7 +19,7 @@
     (not (or (nil? action) (nil? (get valid-actions action))))))
 
 (defn decorate-response-in-jsonp-callback [params response]
-  (handlers/->Response (:status response) (:headers response) (str (get params "callback") "(" (:body response) ")")))
+  (handlers/->Response (:status response) (:headers response) (str (get params "callback") "(" (:body response) ")") (:session response)))
 
 (defn check-callback-paramater [params session handler]
   (if (nil? (get params "callback"))

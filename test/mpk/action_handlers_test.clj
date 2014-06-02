@@ -15,7 +15,7 @@
     (file-utils/make-folder temporary-kanban-folder)
     (let [key-handler (handlers/->KeyHandler)]
       (is (= (perform key-handler {"kanbanKey" "foobar"} {})
-             (handlers/->Response 200 {"Content-Type" "application/json"} "{\"success\":true,\"lastUpdated\":0}"))))
+             (handlers/->Response 200 {"Content-Type" "application/json"} "{\"success\":true,\"lastUpdated\":0}" {}))))
     (file-utils/clean-folder temporary-kanban-folder)))
 
 (deftest test-the-key-validation-method-with-file
@@ -48,7 +48,8 @@
          (handle-error-within-body "Error message")
          (handlers/->Response 200
                     {"Content-Type" "application/json"}
-                    (json/write-str {"success" false, "error" "Error message"}))))))
+                    (json/write-str {"success" false, "error" "Error message"})
+                    {})))))
 
 (deftest test-reading-non-existing-kanban
   (testing "Should return error within body if Kanban doesn't exist"
