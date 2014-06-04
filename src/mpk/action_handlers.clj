@@ -21,7 +21,12 @@
 (deftype SaveHandler []
   ActionHandler
   (perform [this params session]
-          (Response. 200 {"Content-Type" "text/plain"} "Yuppi, save-handler works" {})))
+          (if-let [fragments (get params "fragments")]
+            (Response. 200
+                       {"Content-Type" "application/json"}
+                       ""
+                       {:number-of-fragments fragments :fragments []})
+            ())))
 
 
 (deftype ReadHandler []

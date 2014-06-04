@@ -57,3 +57,10 @@
           response (perform read-handler {"kanbanKey" "foobarboo"} {})]
       (is (= (:body response) (json/write-str {"success" false "error" "Kanban with key [foobarboo] was never persisted"})))
       (is (= (:status response) 200)))))
+
+(deftest test-processing-save-session-starts
+  (testing "Should start session when fragments in parameters list"
+    (let [save-handler (handlers/->SaveHandler)
+          response (perform save-handler {"fragments" 12} {})]
+      (is (= (:session response) {:number-of-fragments 12 :fragments []}))
+      (is (= (:status response) 200)))))
