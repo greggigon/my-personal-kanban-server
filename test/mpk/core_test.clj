@@ -18,4 +18,4 @@
 
 (deftest test-decorating-jsonp-callbacks
   (testing "If returned body of response is wrapped in JSONP callback"
-    (is (= (:body (decorate-response-in-jsonp-callback {"callback" "callback"} (handlers/->Response 200 {} "{}" {}))) "callback({})"))))
+    (is (= (:body (decorate-response-in-jsonp-callback {"callback" "callback"} (handlers/->Response 200 "{}" {}))) "callback({})"))))

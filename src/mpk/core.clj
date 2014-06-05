@@ -19,7 +19,10 @@
     (not (or (nil? action) (nil? (get valid-actions action))))))
 
 (defn decorate-response-in-jsonp-callback [params response]
-  (handlers/->Response (:status response) (:headers response) (str (get params "callback") "(" (:body response) ")") (:session response)))
+  (handlers/->Response
+   (:status response)
+   (str (get params "callback") "(" (:body response) ")")
+   (:session response)))
 
 (defn mpk-response-to-response [resp]
   (-> (response (:body resp)) (status (:status resp)) (content-type "application/json") (assoc :session (:session resp))))
