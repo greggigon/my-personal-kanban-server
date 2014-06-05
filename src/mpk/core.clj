@@ -21,6 +21,9 @@
 (defn decorate-response-in-jsonp-callback [params response]
   (handlers/->Response (:status response) (:headers response) (str (get params "callback") "(" (:body response) ")") (:session response)))
 
+(defn mpk-response-to-response [resp]
+  (-> (response (:body resp)) (status (:status resp)) (content-type "application/json") (assoc :session (:session resp))))
+
 (defn check-callback-paramater [params session handler]
   (if (nil? (get params "callback"))
      (-> (response "This service responds only to JSONP request. You are missing callback parameter") (status 405))
@@ -31,7 +34,8 @@
     (if (or (nil? action) (nil? (get valid-actions action)))
       (-> (response "Invalid method") (status 405))
       (let [the-action-handler ((get valid-actions action) actions)]
-        (decorate-response-in-jsonp-callback params (check-callback-paramater params session the-action-handler))))))
+        (mpk-response-to-response
+         (decorate-response-in-jsonp-callback params (check-callback-paramater params session the-action-handler)))))))
 
 (def mpk-app (wrap-session (wrap-params mpk-handler)))
 
