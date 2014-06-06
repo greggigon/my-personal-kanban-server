@@ -60,6 +60,17 @@
 (deftest test-processing-save-session-starts
   (testing "Should start session when fragments in parameters list"
     (let [save-handler (handlers/->SaveHandler)
-          response (perform save-handler {"fragments" 12} {})]
-      (is (= (:session response) {:number-of-fragments 12 :fragments []}))
+          response (perform save-handler {"fragments" "4"} {})]
+      (is (= (:session response) {:number-of-fragments 4 :fragments [nil nil nil nil]}))
       (is (= (:status response) 200)))))
+
+(deftest test-creating-empty-array
+  (testing "If empty array is created"
+    (is (= (create-empty-array 5) [nil nil nil nil nil]))))
+
+(deftest test-adding-fragment-to-session
+  (testing "Should add fragment to existing session"
+    (let [save-handler (handlers/->SaveHandler)
+          response
+          (perform save-handler {"chunk" "boo" "chunkNumber" "2"} {:number-of-fragments 2 :fragments [nil nil]})]
+      (is (= (:session response) {:number-of-fragments 2 :fragments [nil "boo"]})))))

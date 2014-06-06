@@ -17,14 +17,30 @@
 (defn kanban-with-key-was-persisted? [directory kanban-key]
   (not= (last-updated directory kanban-key) 0))
 
+(defn create-empty-array [size]
+  (repeat size nil))
+
+(defn- handle-fragments
+  [fragments]
+  (Response. 200 "" {:number-of-fragments fragments :fragments (create-empty-array fragments)}))
+
+(defn- handle-chunks
+  [chunk-number czunk session]
+  (if-let [fragments-in-session (:fragments session)]
+    (Response. 200 "" (assoc session :fragments (assoc fragments-in-session (- chunk-number 1) czunk)))
+    ())) ;; no fragments in session, handle error
+
 (deftype SaveHandler []
   ActionHandler
   (perform [this params session]
-          (if-let [fragments (get params "fragments")]
-            (Response. 200
-                       ""
-                       {:number-of-fragments fragments :fragments []})
-            ())))
+           (let [fragments (get params "fragments")
+                 chunk-number (get params "chunkNumber")
+                 czunk (get params "chunk")
+                 hasz (get params "hash")]
+             (cond
+              (not (nil? fragments)) (handle-fragments (int (read-string fragments)))
+              (not (nil? chunk-number)) (handle-chunks (int (read-string chunk-number)) czunk session)
+             ))))
 
 
 (deftype ReadHandler []
