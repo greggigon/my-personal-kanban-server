@@ -75,6 +75,14 @@
           (perform save-handler {"chunk" "boo" "chunkNumber" "2"} {:number-of-fragments 2 :fragments [nil nil]})]
       (is (= (:session response) {:number-of-fragments 2 :fragments [nil "boo"]})))))
 
+(deftest test-adding-fragment-to-session-with-no-previous-fragments
+  (testing "Should fail and clear session when saving chunk but there are no fragments in session"
+    (let [save-handler (handlers/->SaveHandler)
+          response
+          (perform save-handler {"chunk" "boo" "chunkNumber" "2"} {:number-of-fragments 2})]
+      (is (= (:session response) {}))
+      (is (= (:body response) (json/write-str {"success" false "error" "Some old junk in the session. Try to save again."}))))))
+
 (deftest test-saving-full-kanban
   (testing "Should persist kanban into file when valid hash is received"
     (do-build-configuration ["directory" temporary-kanban-folder])
