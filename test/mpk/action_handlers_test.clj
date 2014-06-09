@@ -77,6 +77,20 @@
 
 (deftest test-saving-full-kanban
   (testing "Should persist kanban into file when valid hash is received"
+    (do-build-configuration ["directory" temporary-kanban-folder])
     (let [save-handler (handlers/->SaveHandler)
-          response
-          (perform save-handler {"hash" "adbf5a778175ee757c34d0eba4e932bc"} {:number-of-fragments 2 :fragments ["as" "da"]})])))
+          params {"hash" "adbf5a778175ee757c34d0eba4e932bc" "kanbanKey" "foo-bar"}
+          session {:number-of-fragments 2 :fragments ["as" "da"]}
+          response (perform save-handler params session)]
+      (is (= (:body response) (json/write-str {"success" true})))
+      (is (= (:status response) 201)))
+    (file-utils/clean-folder temporary-kanban-folder)))
+
+(deftest test-saving-full-kanban-hash-failure
+  (testing "Should fail to save kanban when hash fails"
+    (let [save-handler (handlers/->SaveHandler)
+          params {"hash" "adbf5a778175ee757c34d0eba4e932" "kanbanKey" "foo-bar"}
+          session {:number-of-fragments 2 :fragments ["as" "da"]}
+          response (perform save-handler params session)]
+      (is (= (:body response) (json/write-str {"success" false "error" "Received kanban doesn't validate with Hash. adbf5a778175ee757c34d0eba4e932 <=> adbf5a778175ee757c34d0eba4e932bc"})))
+      (is (= (:status response) 200)))))

@@ -3,7 +3,8 @@
             [mpk.configuration :refer :all]
             [clojure.data.json :as json]
             [clojure.string :refer [join]]
-            ))
+            )
+  (:import [java.io IOException]))
 
 (defprotocol ActionHandler
   (perform [this params session]))
@@ -31,11 +32,16 @@
     (Response. 200 "" (assoc session :fragments (assoc fragments-in-session (- chunk-number 1) czunk)))
     ())) ;; no fragments in session, handle error
 
-(defn- handle-hash [hasz session]
-  (let [full-kanban (join (:fragments session))]
-    (if (= hasz (md5 full-kanban))
-      (save )
-      ())))
+(defn- handle-hash [hasz kanban-key session]
+  (let [full-kanban (join (:fragments session)) calc-hash (md5 full-kanban)]
+    (if (= hasz calc-hash)
+      (try
+        (do
+          (save (:directory @configuration) kanban-key full-kanban)
+          (Response. 201 (json/write-str {"success" true}) {}))
+        (catch IOException ex
+          (handle-error-within-body (str "Unable to save Kanban - " (.getMessage ex)))))
+      (handle-error-within-body (str "Received kanban doesn't validate with Hash. " hasz " <=> " calc-hash)))))
 
 (deftype SaveHandler []
   ActionHandler
@@ -48,7 +54,7 @@
              (cond
               (not (nil? fragments)) (handle-fragments (int (read-string fragments)))
               (not (nil? chunk-number)) (handle-chunks (int (read-string chunk-number)) czunk session)
-              (not (nil? hasz)) (handle-hash hasz session) ;;storage-directory kanban-key kanban-content
+              (not (nil? hasz)) (handle-hash hasz kanban-key session)
              ))))
 
 
