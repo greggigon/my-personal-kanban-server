@@ -74,3 +74,9 @@
           response
           (perform save-handler {"chunk" "boo" "chunkNumber" "2"} {:number-of-fragments 2 :fragments [nil nil]})]
       (is (= (:session response) {:number-of-fragments 2 :fragments [nil "boo"]})))))
+
+(deftest test-saving-full-kanban
+  (testing "Should persist kanban into file when valid hash is received"
+    (let [save-handler (handlers/->SaveHandler)
+          response
+          (perform save-handler {"hash" "adbf5a778175ee757c34d0eba4e932bc"} {:number-of-fragments 2 :fragments ["as" "da"]})])))
