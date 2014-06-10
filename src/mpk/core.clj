@@ -30,7 +30,7 @@
 (defn check-callback-paramater [params session handler]
   (if (nil? (get params "callback"))
      (-> (response "This service responds only to JSONP request. You are missing callback parameter") (status 405))
-      (perform handler params session)))
+     (perform handler params session)))
 
 (defn mpk-handler [request]
   (let [{action "action" :as params} (:params request) session (:session request)]

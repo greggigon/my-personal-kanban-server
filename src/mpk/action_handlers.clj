@@ -20,7 +20,7 @@
   (not= (last-updated directory kanban-key) 0))
 
 (defn create-empty-array [size]
-  (repeat size nil))
+  (vec (repeat size nil)))
 
 (defn- handle-fragments
   [fragments]
