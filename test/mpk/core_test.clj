@@ -19,3 +19,7 @@
 (deftest test-decorating-jsonp-callbacks
   (testing "If returned body of response is wrapped in JSONP callback"
     (is (= (:body (decorate-response-in-jsonp-callback {"callback" "callback"} (handlers/->Response 200 "{}" {}))) "callback({})"))))
+
+(deftest test-rejecting-non-service-requests
+  (testing "Should reject non service requests"
+    (is (= (:status (mpk-handler {:uri "/some"})) 405))))
