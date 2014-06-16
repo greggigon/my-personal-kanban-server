@@ -5,8 +5,11 @@
         ring.adapter.jetty
         ring.middleware.session
         mpk.configuration)
-  (:require [mpk.action-handlers :as handlers :refer :all]))
+  (:require [mpk.action-handlers :as handlers :refer :all]
+            [clj-time.core :as t]
+            [clj-time.format :as f]))
 
+(def mpk-formatter (f/formatter "yyyy-MM-dd HH:mm:ss"))
 
 (def valid-actions {"put" :put "get" :get "key" :key})
 
@@ -42,8 +45,10 @@
 
 (defn mpk-handler [request]
   (let [uri (:uri request)]
-    (if (not (= "/service" uri))
-      (-> (response "Invalid method") (status 405))
+    (if (not (.contains (.toLowerCase uri) "/service/kanban"))
+      (do
+        (println (str "[" (f/unparse mpk-formatter (t/now)) "] " request))
+        (-> (response "Invalid method") (status 405)))
       (handle-service-request request))))
 
 (def mpk-app (wrap-session (wrap-params mpk-handler)))

@@ -24,12 +24,12 @@
 
 (defn- handle-fragments
   [fragments]
-  (Response. 200 "" {:number-of-fragments fragments :fragments (create-empty-array fragments)}))
+  (Response. 200 "{}" {:number-of-fragments fragments :fragments (create-empty-array fragments)}))
 
 (defn- handle-chunks
   [chunk-number czunk session]
   (if-let [fragments-in-session (:fragments session)]
-    (Response. 200 "" (assoc session :fragments (assoc fragments-in-session (- chunk-number 1) czunk)))
+    (Response. 200 "{}" (assoc session :fragments (assoc fragments-in-session (- chunk-number 1) czunk)))
     (handle-error-within-body "Some old junk in the session. Try to save again.")))
 
 (defn- handle-hash [hasz kanban-key session]
