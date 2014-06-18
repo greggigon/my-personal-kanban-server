@@ -1,4 +1,8 @@
+
+
+
 # My Personal Kanban - Local Cloud
+
 
 A Clojure application that enables My Personal Kanban to be stored and portable with your own dedicated server.
 
@@ -12,6 +16,7 @@ There is no need to generate Kanban key. Any string value which is at least 1 ch
 ### Installation
 
 Download standalone version of my-personal-kanban-local-cloud jar file. It requires Java installed to run.
+You can get it from [http://dl.bintray.com/greggigon/maven/my-personal-kanban-local-cloud-0.1.0-standalone.jar][1].
 
 ### Running
 
@@ -38,3 +43,6 @@ If you wish to contribute the code, please feel free to fork and crate pull requ
 Copyright © 2014 Grzegorz (Greg) Gigon, My Personal Kanban
 
 Distributed under the GNU GENERAL PUBLIC LICENSE.
+
+
+  [1]: https://bintray.com/greggigon/maven/My-Personal-Kanban-Server/0.1.0/view/general
