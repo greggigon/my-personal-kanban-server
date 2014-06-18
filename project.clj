@@ -1,4 +1,4 @@
-(defproject my-personal-kanban-local-cloud "0.1.0-SNAPSHOT"
+(defproject my-personal-kanban-local-cloud "0.1.0"
   :description "My Personal Kanban Local Cloud"
   :url "http://my-personal-kanban.appspot.com"
   :license {:name "GNU General Public Licence version 3"
