@@ -37,4 +37,4 @@ If you wish to contribute the code, please feel free to fork and crate pull requ
 
 Copyright © 2014 Grzegorz (Greg) Gigon, My Personal Kanban
 
-Distributed under the Eclipse Public License.
+Distributed under the GNU GENERAL PUBLIC LICENSE.

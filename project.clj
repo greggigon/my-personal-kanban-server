@@ -1,8 +1,8 @@
 (defproject my-personal-kanban-local-cloud "0.1.0-SNAPSHOT"
   :description "My Personal Kanban Local Cloud"
-  :url "http://to-do.com"
-  :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
+  :url "http://my-personal-kanban.appspot.com"
+  :license {:name "GNU General Public Licence version 3"
+            :url "ttp://www.gnu.org/licenses/"}
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [ring/ring-core "1.2.2"]
                  [ring/ring-jetty-adapter "1.2.2"]
