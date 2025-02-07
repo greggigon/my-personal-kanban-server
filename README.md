@@ -1,4 +1,6 @@
-
+* ************************************************** *
+* This project is no longer maintained or supported!
+* ************************************************** *
 
 
 # My Personal Kanban - Local Cloud
